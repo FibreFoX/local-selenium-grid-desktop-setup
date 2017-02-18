@@ -1,2 +1,3 @@
 /.vm/.vagrant
 /.vm/config/custom.retry
+/test-project/target/
