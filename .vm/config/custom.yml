@@ -91,14 +91,14 @@
       become: true
 # run selenium node with geckodriver
     - name: run SELENIUM GRID 2 (node - firefox)
-      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.gecko.driver=/home/vagrant/geckodriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=firefox,version=45.7,platform=LINUX,firefox_binary=/usr/lib/firefox -port 5555&
+      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.gecko.driver=/home/vagrant/geckodriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=firefox,version=45.7,platform=LINUX,maxInstances=5,firefox_binary=/usr/lib/firefox -port 5555&
       args:
         executable: /bin/bash
       become: true
 
 # run selenium node with chromedriver
     - name: run SELENIUM GRID 2 (node - chrome)
-      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.chrome.driver=/home/vagrant/chromedriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=chrome,version=56.0,platform=LINUX,chrome_binary=/usr/bin/google-chrome -port 5556 &
+      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.chrome.driver=/home/vagrant/chromedriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=chrome,version=56.0,platform=LINUX,maxInstances=5,chrome_binary=/usr/bin/google-chrome -port 5556 &
       args:
         executable: /bin/bash
       become: true
