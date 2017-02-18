@@ -98,7 +98,7 @@
 
 # run selenium node with chromedriver
     - name: run SELENIUM GRID 2 (node - chrome)
-      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.chrome.driver=/home/vagrant/chromedriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=chrome,version=56.0,platform=LINUX,chrome_binary=/usr/bin/google-chrome -port 6666 &
+      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.chrome.driver=/home/vagrant/chromedriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=chrome,version=56.0,platform=LINUX,chrome_binary=/usr/bin/google-chrome -port 5556 &
       args:
         executable: /bin/bash
       become: true
