@@ -1,0 +1,104 @@
+---
+- hosts: all
+  tasks:
+    - name: set timezone
+      shell: echo "Europe/Berlin" | tee /etc/timezone
+      args:
+        executable: /bin/bash
+      become: true
+    - name: set timezone
+      shell: dpkg-reconfigure -f noninteractive tzdata
+      become: true
+    - name: make sure some useful stuff and requirements are installed
+      apt: name={{ item }} state=present
+      become: true
+      with_items:
+        - screen
+        - vim
+    - name: make VIM default editor
+      shell: 'echo SELECTED_EDITOR="/usr/bin/vim.basic" > /root/.selected_editor'
+      args:
+        executable: /bin/bash
+      become: true
+    - name: adding PPA of WebUpdateTeam (Ubuntu) (deb)
+      apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' filename='webupd8team-java' state=present
+      become: true
+    - name: adding PPA of WebUpdateTeam (Ubuntu) (deb-src)
+      apt_repository: repo='deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' filename='webupd8team-java-src' state=present
+      become: true
+    - name: adding PPA signing key of WebUpdateTeam (Ubuntu)
+      apt_key: keyserver="hkp://keyserver.ubuntu.com:80" id=EEA14886 state=present
+      become: true
+    - name: refresh APT cache
+      apt: update_cache=yes
+      become: true
+
+    - name: auto-accept Oracle JDK 8 license
+      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+      become: true
+
+    - name: installing Oracle JDK 8
+      apt: name=oracle-java8-installer state=present
+      become: true
+
+    - name: installing Oracle JDK 8 strong encryption files
+      apt: name=oracle-java8-unlimited-jce-policy state=present
+      become: true
+
+    - name: set Oracle JDK 8 as default
+      apt: name=oracle-java8-set-default state=present
+      become: true
+
+# make some preparations
+    - name: make sure system is up2date
+      shell: apt-get update && apt-get upgrade -y -qq
+      args:
+        executable: /bin/bash
+      become: true
+    - shell: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      args:
+        executable: /bin/bash
+      become: true
+    - name: adding PPA of Google (deb)
+      apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main' filename='google-chrome' state=present
+      become: true
+    - name: install chrome browser
+      apt: name=google-chrome-stable state=present
+      become: true
+      
+# prepare webdriver (list of webdrivers can be taken from https://seleniumhq.github.io/docs/wd.html#quick_reference)
+# https://github.com/mozilla/geckodriver/releases
+    - name: extract webdriver implementation for Firefox
+      unarchive:
+        src: /vagrant/data/geckodriver-v0.14.0-linux64.tar.gz
+        dest: /home/vagrant/
+        remote_src: true
+      become: true
+# https://chromedriver.storage.googleapis.com/
+    - name: extract webdriver implementation for Chrome
+      unarchive:
+        src: /vagrant/data/chromedriver_linux64.zip
+        dest: /home/vagrant/
+        remote_src: true
+      become: true
+
+# https://github.com/SeleniumHQ/selenium/wiki/Grid2
+# prepare selenium cluster
+    - name: run SELENIUM GRID 2 (hub)
+      shell: source /etc/profile.d/jdk.sh && java -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role hub &
+      args:
+        executable: /bin/bash
+      become: true
+# run selenium node with geckodriver
+    - name: run SELENIUM GRID 2 (node - firefox)
+      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.gecko.driver=/home/vagrant/geckodriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=firefox,version=45.7,platform=LINUX,firefox_binary=/usr/lib/firefox -port 5555&
+      args:
+        executable: /bin/bash
+      become: true
+
+# run selenium node with chromedriver
+    - name: run SELENIUM GRID 2 (node - chrome)
+      shell: source /etc/profile.d/jdk.sh && java -Dwebdriver.chrome.driver=/home/vagrant/chromedriver -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role node -hub http://localhost:4444/grid/register -browser browserName=chrome,version=56.0,platform=LINUX,chrome_binary=/usr/bin/google-chrome -port 6666 &
+      args:
+        executable: /bin/bash
+      become: true

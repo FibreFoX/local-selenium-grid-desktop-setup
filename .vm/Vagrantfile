@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "boxcutter/debian8-desktop"
+  
+    # port for the Selenium Grid HUB
+    config.vm.network "forwarded_port", guest: 4444, host: 4444
+    # port for the Selenium Grid NODE
+    config.vm.network "forwarded_port", guest: 5555, host: 5555
+    
+    # wait before provisioning via ansible (because VM-image does run apt-get on boot)
+    config.vm.provision "shell", inline: "sleep 10"
+    config.vm.provision "ansible_local" do |ansible|
+        ansible.playbook = "config/custom.yml"
+        ansible.verbose = true
+        ansible.install_mode = :pip
+    end
+end
