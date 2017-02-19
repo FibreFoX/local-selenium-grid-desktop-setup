@@ -82,8 +82,11 @@
         remote_src: true
       become: true
 
-# https://github.com/SeleniumHQ/selenium/wiki/Grid2
+# the following commands run with "display 0" being set, because we need to open the browser on the shown display !!!
+# http://stackoverflow.com/a/3664215/1961102
+#
 # prepare selenium cluster
+# https://github.com/SeleniumHQ/selenium/wiki/Grid2
     - name: run SELENIUM GRID 2 (hub)
       shell: source /etc/profile.d/jdk.sh && export DISPLAY=:0 && java -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role hub &
       args:

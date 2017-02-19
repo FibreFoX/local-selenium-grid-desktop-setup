@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    <!-- firefox as default, because Screenshooter requires at least one being "default" -->
     <extension qualifier="webdriver">
         <property name="remote">true</property>
         <property name="remoteAddress">http://localhost:5555/wd/hub</property>
@@ -10,4 +11,6 @@
         <property name="remoteAddress">http://localhost:5556/wd/hub</property>
         <property name="browser">chrome</property>
     </extension>
+    <!-- possible BROWSERSTACK support: https://www.browserstack.com/automate/capabilities -->
+    <!-- https://github.com/arquillian/arquillian-extension-drone/tree/master/extension/arquillian-drone-browserstack-extension -->
 </arquillian>
