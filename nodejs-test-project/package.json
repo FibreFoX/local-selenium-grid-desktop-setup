@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-test-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Danny Althoff",
+  "license": "MIT",
+  "devDependencies": {
+    "selenium-webdriver": "^3.1.0"
+  }
+}

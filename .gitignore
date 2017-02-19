@@ -1,3 +1,4 @@
 /.vm/.vagrant
 /.vm/config/custom.retry
 */target/
+*/node_modules/
