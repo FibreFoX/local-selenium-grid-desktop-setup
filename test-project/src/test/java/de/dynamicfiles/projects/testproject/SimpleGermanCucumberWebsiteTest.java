@@ -14,10 +14,10 @@ import org.junit.runner.RunWith;
 @RunWith(ArquillianCucumber.class)
 @RunAsClient
 @CucumberOptions(
-        glue = "de.dynamicfiles.projects.testproject.cucumberglue",
-        features = "src/test/resources/cucumber/visitWebsite.feature",
-        plugin = {"html:target/cucumber"}
+        glue = "de.dynamicfiles.projects.testproject.cucumberglue.german",
+        features = "src/test/resources/cucumber/besucheWebsite.feature",
+        plugin = {"pretty", "html:target/cucumber"}
 )
-public class SimpleCucumberWebsiteTest {
+public class SimpleGermanCucumberWebsiteTest {
 
 }
