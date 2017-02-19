@@ -59,6 +59,30 @@
             <scope>test</scope>
             <type>pom</type>
         </dependency>
+        <!-- recording videos of the tests is supported by adding this dependency (only local records) -->
+        <!--
+        <dependency>
+            <groupId>org.arquillian.extension</groupId>
+            <artifactId>arquillian-desktop-video-recorder</artifactId>
+            <version>1.1.6.Final</version>
+            <scope>test</scope>
+        </dependency>
+        -->
+        <!-- testing "external" websites using BDD via Cucumber -->
+        <!-- https://gist.github.com/aslakknutsen/e2607f53863db10f4457 -->
+        <dependency>
+            <groupId>com.github.cukespace</groupId>
+            <artifactId>cukespace-core</artifactId>
+            <version>1.6.4</version>
+            <scope>test</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-spi</artifactId>
+        </dependency>
+        -->
+
     </dependencies>
     
     

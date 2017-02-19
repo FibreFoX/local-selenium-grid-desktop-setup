@@ -13,4 +13,18 @@
     </extension>
     <!-- possible BROWSERSTACK support: https://www.browserstack.com/automate/capabilities -->
     <!-- https://github.com/arquillian/arquillian-extension-drone/tree/master/extension/arquillian-drone-browserstack-extension -->
+    
+    <!-- when running on the same system (not remote webdriver), the tests can be video-recorded -->
+    <!--
+    <extension qualifier="recorder">
+        <property name="takeOnlyOnFail">false</property>
+        <property name="startBeforeClass">true</property>
+    </extension>
+    -->
+    
+    <!-- when using BDD/Cucumber -->
+    <extension qualifier="cucumber">
+        <property name="report">true</property>
+        <!-- <property name="report-directory">target/cucumber-report</property> -->
+    </extension>
 </arquillian>
