@@ -55,9 +55,10 @@
       args:
         executable: /bin/bash
       become: true
-    - shell: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      args:
-        executable: /bin/bash
+# install chrome browser from google
+    - apt_key:
+        url: "https://dl-ssl.google.com/linux/linux_signing_key.pub"
+        state: present
       become: true
     - name: adding PPA of Google (deb)
       apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main' filename='google-chrome' state=present
