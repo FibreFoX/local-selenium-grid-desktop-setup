@@ -6,4 +6,4 @@ Requirements:
 * Virtualbox (https://www.virtualbox.org/)
 * Java
 ** OracleJDK: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-** OpenJDK: https://github.com/ojdkbuild/ojdkbuild
+** OpenJDK (untested): https://github.com/ojdkbuild/ojdkbuild
