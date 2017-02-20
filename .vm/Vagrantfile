@@ -11,6 +11,9 @@ Vagrant.configure("2") do |config|
     # port for the Selenium Grid NODE chrome
     config.vm.network "forwarded_port", guest: 5556, host: 5556
     
+    # additional network to reach host-system servers, which is reachable via 172.28.128.1
+    config.vm.network "private_network", ip: "172.28.128.3"
+    
     # wait before provisioning via ansible (because VM-image does run apt-get on boot)
     config.vm.provision "shell", inline: "sleep 10"
     config.vm.provision "ansible_local" do |ansible|
