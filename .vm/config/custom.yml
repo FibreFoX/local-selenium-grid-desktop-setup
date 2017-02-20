@@ -15,11 +15,17 @@
       with_items:
         - screen
         - vim
-    - name: make VIM default editor
+        - zip
+        - unzip
+    - name: make VIM default editor (for root-user)
       shell: 'echo SELECTED_EDITOR="/usr/bin/vim.basic" > /root/.selected_editor'
       args:
         executable: /bin/bash
       become: true
+    - name: make VIM default editor (for vagrant-user)
+      shell: 'echo SELECTED_EDITOR="/usr/bin/vim.basic" > /home/vagrant/.selected_editor'
+      args:
+        executable: /bin/bash
     - name: adding PPA of WebUpdateTeam (Ubuntu) (deb)
       apt_repository: repo='deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' filename='webupd8team-java' state=present
       become: true
@@ -69,25 +75,35 @@
       
 # prepare webdriver (list of webdrivers can be taken from https://seleniumhq.github.io/docs/wd.html#quick_reference)
 # https://github.com/mozilla/geckodriver/releases
+    - name: download geckodriver if needed
+      get_url:
+        url: https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz
+        dest: /vagrant/data/geckodriver-v0.14.0-linux64.tar.gz
     - name: extract webdriver implementation for Firefox
       unarchive:
         src: /vagrant/data/geckodriver-v0.14.0-linux64.tar.gz
         dest: /home/vagrant/
         remote_src: true
-      become: true
 # https://chromedriver.storage.googleapis.com/
+    - name: download chromedriver if needed
+      get_url:
+        url: https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
+        dest: /vagrant/data/chromedriver_linux64.zip
     - name: extract webdriver implementation for Chrome
       unarchive:
         src: /vagrant/data/chromedriver_linux64.zip
         dest: /home/vagrant/
         remote_src: true
-      become: true
 
 # the following commands run with "display 0" being set, because we need to open the browser on the shown display !!!
 # http://stackoverflow.com/a/3664215/1961102
 #
 # prepare selenium cluster
 # https://github.com/SeleniumHQ/selenium/wiki/Grid2
+    - name: download selenium server standalone if needed
+      get_url:
+        url: http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
+        dest: /vagrant/data/selenium-server-standalone-3.0.1.jar
     - name: run SELENIUM GRID 2 (hub)
       shell: source /etc/profile.d/jdk.sh && export DISPLAY=:0 && java -jar /vagrant/data/selenium-server-standalone-3.0.1.jar -role hub &
       args:
