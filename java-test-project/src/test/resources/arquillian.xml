@@ -3,12 +3,12 @@
     <!-- firefox as default, because Screenshooter requires at least one being "default" -->
     <extension qualifier="webdriver">
         <property name="remote">true</property>
-        <property name="remoteAddress">http://localhost:5555/wd/hub</property>
+        <property name="remoteAddress">http://localhost:4444/wd/hub</property>
         <property name="browser">firefox</property>
     </extension>
     <extension qualifier="webdriver-chrome">
         <property name="remote">true</property>
-        <property name="remoteAddress">http://localhost:5556/wd/hub</property>
+        <property name="remoteAddress">http://localhost:4444/wd/hub</property>
         <property name="browser">chrome</property>
     </extension>
     <!-- possible BROWSERSTACK support: https://www.browserstack.com/automate/capabilities -->
