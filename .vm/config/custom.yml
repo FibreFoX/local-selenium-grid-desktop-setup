@@ -1,14 +1,6 @@
 ---
 - hosts: all
   tasks:
-    - name: set timezone
-      shell: echo "Europe/Berlin" | tee /etc/timezone
-      args:
-        executable: /bin/bash
-      become: true
-    - name: set timezone
-      shell: dpkg-reconfigure -f noninteractive tzdata
-      become: true
     - name: make sure some useful stuff and requirements are installed
       apt: name={{ item }} state=present
       become: true
@@ -17,6 +9,31 @@
         - vim
         - zip
         - unzip
+        - debconf-utils
+    - name: set timezone
+      shell: echo "Europe/Berlin" | tee /etc/timezone
+      args:
+        executable: /bin/bash
+      become: true
+    - name: reinitialize timezone
+      shell: dpkg-reconfigure -f noninteractive tzdata
+      become: true
+    - name: set DE + EN as locales
+      debconf:
+        name: locales
+        question: locales/locales_to_be_generated
+        value: de_DE.UTF-8 UTF-8, en_US.UTF-8 UTF-8
+        vtype: multiselect
+      become: true
+    - name: set DE default locale
+        name: locales
+        question: locales/default_environment_locale
+        value: de_DE.UTF-8
+        vtype: select
+      become: true
+    - name: switch to german locales
+      shell: dpkg-reconfigure -f noninteractive locales
+      become: true
     - name: make VIM default editor (for root-user)
       shell: 'echo SELECTED_EDITOR="/usr/bin/vim.basic" > /root/.selected_editor'
       args:
