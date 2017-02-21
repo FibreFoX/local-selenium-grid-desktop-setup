@@ -3,6 +3,13 @@
 
 Vagrant.configure("2") do |config|
     config.vm.box = "boxcutter/debian8-desktop"
+
+    # https://github.com/dotless-de/vagrant-vbguest
+    # vagrant plugin install vagrant-vbguest
+    if Vagrant.has_plugin?("vagrant-vbguest")
+        # disable update, because this might take long time ... which slows down local development
+        config.vbguest.auto_update = false
+    end
   
     # port for the Selenium Grid HUB
     config.vm.network "forwarded_port", guest: 4444, host: 4444
@@ -13,6 +20,12 @@ Vagrant.configure("2") do |config|
     
     # additional network to reach host-system servers, which is reachable via 172.28.128.1
     config.vm.network "private_network", ip: "172.28.128.3"
+    
+    # https://github.com/winnfsd/vagrant-winnfsd
+    # vagrant plugin install vagrant-winnfsd
+    if Vagrant.has_plugin?("vagrant-winnfsd")
+        config.winnfsd.logging = on
+    end
     
     # wait before provisioning via ansible (because VM-image does run apt-get on boot)
     config.vm.provision "shell", inline: "sleep 10"
