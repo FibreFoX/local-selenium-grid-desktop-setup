@@ -10,13 +10,20 @@
         - zip
         - unzip
         - debconf-utils
-    - name: set timezone
-      shell: echo "Europe/Berlin" | tee /etc/timezone
-      args:
-        executable: /bin/bash
+    - name: set timezone to Europe/Berlin
+      timezone:
+        name: Europe/Berlin
       become: true
     - name: reinitialize timezone
       shell: dpkg-reconfigure -f noninteractive tzdata
+      become: true
+    - lineinfile:
+        dest: /etc/locale.gen
+        regexp: '^# de_DE\.UTF\-8 UTF\-8'
+        line: 'de_DE.UTF-8 UTF-8'
+      become: true
+    - name: generate german locales
+      shell: dpkg-reconfigure -f noninteractive locales
       become: true
     - name: set DE + EN as locales
       debconf:
@@ -26,13 +33,14 @@
         vtype: multiselect
       become: true
     - name: set DE default locale
+      debconf:
         name: locales
         question: locales/default_environment_locale
         value: de_DE.UTF-8
         vtype: select
       become: true
     - name: switch to german locales
-      shell: dpkg-reconfigure -f noninteractive locales
+      shell: export LANG=de_DE.UTF-8 && export LANGUAGE=de_DE.UTF-8 && dpkg-reconfigure -f noninteractive locales
       become: true
     - name: make VIM default editor (for root-user)
       shell: 'echo SELECTED_EDITOR="/usr/bin/vim.basic" > /root/.selected_editor'
